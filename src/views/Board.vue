@@ -1,14 +1,14 @@
 <template>
   <div class="board py-2 px-5 antialiased select-none">
     <div
-      class="flex whitespace-no-wrap h-full inset-0 absolute overflow-y-hidden overflow-x-scroll  items-start justify-start"
+      class="flex whitespace-no-wrap h-full inset-0 absolute overflow-y-hidden overflow-x-scroll items-start justify-start"
     >
       <div class="column" v-for="(column, index) of board.columns" :key="index">
         <div
           class="flex justify-between items-center mb-4 font-medium relative"
         >
           <div>{{ column.name }}</div>
-          <button type="button" @click="colorPlateToggle(index)">
+          <button type="button" @click="colorPlateToggle(column.name)">
             <svg
               class="w-6 h-6 text-cobalt-400"
               fill="currentColor"
@@ -16,10 +16,10 @@
             >
               <path
                 d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"
-              ></path>
+              />
             </svg>
+            <ColorPlate v-if="selectedBoard == column.name"></ColorPlate>
           </button>
-          <ColorPlate v-show="isbackgroundDropDown"></ColorPlate>
         </div>
         <div class="list-reset">
           <div
@@ -42,14 +42,16 @@ export default {
   components: { ColorPlate },
   data() {
     return {
-      isbackgroundDropDown: false
+      isbackgroundDropDown: false,
+      selectedBoard: ""
     };
   },
   computed: mapState(["board"]),
   methods: {
-    colorPlateToggle(id) {
-      console.log(id);
-      this.isbackgroundDropDown = !this.isbackgroundDropDown;
+    colorPlateToggle(boardName) {
+      this.selectedBoard == boardName
+        ? (this.selectedBoard = "")
+        : (this.selectedBoard = boardName);
     }
   }
 };
